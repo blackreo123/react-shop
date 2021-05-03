@@ -1,0 +1,46 @@
+
+
+$mainColor : #ff0000;
+
+
+@mixin name {
+    background-color: #eeeeee;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 500px;
+    width: 100%;
+}
+.red{
+    color: $mainColor;
+}
+.my-alert{
+    @include name();
+}
+.my-alert2{
+    @extend .my-alert;
+    background-color: #ffe591;
+}
+
+
+
+.my-alert{
+    p{
+        margin-bottom: 0;
+    }
+}
+// div.container h4{
+//     color: blue;
+// }
+
+// div.container p{
+//     color: green;
+// }
+
+// div.container{
+//     h4{
+//         color: blue;
+//     }
+//     p{
+//         color: green;
+//     }
+// }
