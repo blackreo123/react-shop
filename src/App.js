@@ -1,19 +1,22 @@
 /* eslint-disable */
 import './App.css';
 import { Navbar, Nav, NavDropdown, Button, Jumbotron } from 'react-bootstrap';
-import { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import shoesData from './data.js';
 import { Link, Route, Switch } from 'react-router-dom';
 import { Modal } from 'bootstrap';
 import Detail from './Detail';
 import axios from 'axios';
+import Cart from './Cart';
 
+let 재고context = React.createContext();
 function App() {
 
   let [shoes, setShoes] = useState(shoesData);
   let [로딩보안보, 로딩보안보변경] = useState('none');
   let [더보기보안보, 더보기보안보변경] = useState();
   let [더보기누른횟수, 더보기누른횟수변경] = useState(0);
+  let [재고, 재고변경] = useState([10,11,12]);
   
   return (
     <div className="App">
@@ -51,9 +54,11 @@ function App() {
         </Jumbotron>
 
         <div className="container">
+          <재고context.Provider value={재고}>
           <div className="row">
             <ShoeBox shoes={shoes}></ShoeBox>
           </div>
+          </재고context.Provider>
           <div style={{display : 로딩보안보}}>로딩중...</div>
           
           <button style={{display : 더보기보안보}} sty className="btn btn-primary" onClick={()=>{
@@ -86,9 +91,15 @@ function App() {
         <Detail shoes={shoes}></Detail>
       </Route>
 
-      <Route path="/:id">
+      {/* <Route path="/:id">
         <div>아무거나 적었을때</div>
+      </Route> */}
+
+
+      <Route path="/cart">
+          <Cart></Cart>
       </Route>
+
       </Switch>
       {/* 다른 방법 */}
       {/* <Route path="/어쩌구" component={Modal}></Route> */}
@@ -102,7 +113,7 @@ function App() {
 }
 
 function ShoeBox(props) {
-
+  let 재고 = useContext(재고context);
   return (
     props.shoes.map((item) => {
       return (
@@ -111,11 +122,17 @@ function ShoeBox(props) {
           <img src={"https://codingapple1.github.io/shop/shoes" + (item.id + 1) + ".jpg"} width="100%" />
           <h4>{item.title}</h4>
           <p>{item.content} & {item.price}</p>
+          <Test></Test>
         </div>
       )
     })
   )
 }
-
+function Test(){
+  let 재고 = useContext(재고context);
+  return(
+    <p>재고 : {재고}</p>
+  )
+}
 
 export default App;
