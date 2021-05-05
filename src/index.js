@@ -20,21 +20,31 @@ function reducer2(state = alert초기값, action){
 }
 
 let 초기값 = [
-  { id: 0, name: 'niceshoe', quan: 2 },
-  { id: 1, name: 'niceshoe1', quan: 22 },
-  { id: 2, name: 'niceshoe2', quan: 23 },
-  { id: 3, name: 'niceshoe3', quan: 24 }
+  
 ];
 
 //리덕스 데이터 수정방법 정의
 function reducer(state = 초기값, 액션) {
-  if(액션.type === '수량증가'){
+  if(액션.type === '항목추가'){
+    let found = state.findIndex((item)=>{return item.id === 액션.payload.id});
+    if(found >= 0){
+      let copy = [...state];
+      copy[found].quan++;
+      return copy
+    }else{
+
+      let copy = [...state];
+      copy.push(액션.payload);
+      return copy
+    }
+  }
+  else if(액션.type === '수량증가'){
     let copy = [...state];
-    copy[0].quan++;
+    copy[액션.payload].quan++;
     return copy
   }else if(액션.type ==='수량감소'){
     let copy = [...state];
-    copy[0].quan--;
+    copy[액션.payload].quan--;
     return copy
   }else{
     return state

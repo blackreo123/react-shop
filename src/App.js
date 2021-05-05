@@ -1,11 +1,15 @@
 /* eslint-disable */
 import './App.css';
 import { Navbar, Nav, NavDropdown, Button, Jumbotron } from 'react-bootstrap';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, lazy,Suspense } from 'react';
 import shoesData from './data.js';
-import { Link, Route, Switch } from 'react-router-dom';
+import { Link, Route, Switch, useHistory } from 'react-router-dom';
 import { Modal } from 'bootstrap';
-import Detail from './Detail';
+
+//lazy로 다이나믹 임포트
+let Detail = lazy(()=>{return import('./Detail.js')});
+// import Detail from './Detail';
+
 import axios from 'axios';
 import Cart from './Cart';
 
@@ -88,7 +92,10 @@ function App() {
       
       
       <Route path="/detail/:id">
+        <Suspense fallback={<div>로딩중</div>}>
         <Detail shoes={shoes}></Detail>
+
+        </Suspense>
       </Route>
 
       {/* <Route path="/:id">
@@ -114,11 +121,12 @@ function App() {
 
 function ShoeBox(props) {
   let 재고 = useContext(재고context);
+  let history = useHistory();
   return (
     props.shoes.map((item) => {
       return (
 
-        <div className="col-md-4">
+        <div className="col-md-4" onClick={()=>{history.push('/detail/' + item.id)}}>
           <img src={"https://codingapple1.github.io/shop/shoes" + (item.id + 1) + ".jpg"} width="100%" />
           <h4>{item.title}</h4>
           <p>{item.content} & {item.price}</p>

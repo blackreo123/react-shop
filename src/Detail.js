@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import './Detail.scss';
 import { Navbar, Nav, NavDropdown, Button, Jumbotron } from 'react-bootstrap';
 import {CSSTransition} from 'react-transition-group';
+import { connect } from 'react-redux';
 let 박스 = styled.div`
   padding : 20px;
 `;
@@ -57,7 +58,10 @@ function Detail(props) {
           <h4 className="pt-5">{find.title}</h4>
           <p>{find.content}</p>
           <p>{find.price}원</p>
-          <button className="btn btn-danger">주문하기</button>
+          <button className="btn btn-danger" onClick={()=>{
+            props.dispatch({type : '항목추가', payload : {id:find.id, name:find.title , quan:1}})
+            history.push('/cart')
+          }}>주문하기</button>
           <button className="btn btn-danger" onClick={() => { history.goBack() }}>뒤로가기</button>
         </div>
       </div>
@@ -86,4 +90,10 @@ function TabContent(props){
     return <div>1번째</div>
   }
 }
-export default Detail;
+function state를props화(state){
+  return{
+      state : state.reducer,
+      alert열렸니 : state.reducer2
+  }
+}
+export default connect(state를props화)(Detail)
