@@ -7,6 +7,22 @@ import { BrowserRouter } from 'react-router-dom'; //HashRouter도 있다 -> 좀�
 import { Provider } from 'react-redux';
 import { combineReducers, createStore } from 'redux';
 
+//remind 만들기
+let remind = new Set();
+const reducer3 = (state = remind,action) =>{
+  if(action.type === 'addRemind'){
+      
+      remind.add(action.payload);
+      
+      localStorage.setItem('remind', JSON.stringify([...remind]));
+      return remind
+ 
+  
+}else{
+  return state
+}
+}
+
 let alert초기값 = true;
 
 function reducer2(state = alert초기값, action){
@@ -52,7 +68,7 @@ function reducer(state = 초기값, 액션) {
   
 }
 
-let store = createStore(combineReducers({reducer,reducer2}));
+let store = createStore(combineReducers({reducer,reducer2,reducer3}));
 
 
 ReactDOM.render(

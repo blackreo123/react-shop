@@ -5,6 +5,12 @@ import React, { useContext, useState, lazy,Suspense } from 'react';
 import shoesData from './data.js';
 import { Link, Route, Switch, useHistory } from 'react-router-dom';
 import { Modal } from 'bootstrap';
+import ShoeBox from './ShoeBox.js';
+
+
+//remind
+let remind = localStorage.getItem('remind');
+
 
 //lazy로 다이나믹 임포트
 let Detail = lazy(()=>{return import('./Detail.js')});
@@ -12,9 +18,10 @@ let Detail = lazy(()=>{return import('./Detail.js')});
 
 import axios from 'axios';
 import Cart from './Cart';
+import { connect } from 'react-redux';
 
 let 재고context = React.createContext();
-function App() {
+function App(props) {
 
   let [shoes, setShoes] = useState(shoesData);
   let [로딩보안보, 로딩보안보변경] = useState('none');
@@ -57,6 +64,10 @@ function App() {
           </p>
         </Jumbotron>
 
+        {/* remind */}
+        <div>{remind}</div>
+
+
         <div className="container">
           <재고context.Provider value={재고}>
           <div className="row">
@@ -87,13 +98,14 @@ function App() {
           
           
         </div>
+        
       </Route>
       
       
       
       <Route path="/detail/:id">
         <Suspense fallback={<div>로딩중</div>}>
-        <Detail shoes={shoes}></Detail>
+        <Detail shoes={shoes} remind={props.remind}></Detail>
 
         </Suspense>
       </Route>
@@ -119,28 +131,35 @@ function App() {
   );
 }
 
-function ShoeBox(props) {
-  let 재고 = useContext(재고context);
-  let history = useHistory();
-  return (
-    props.shoes.map((item) => {
-      return (
+// function ShoeBox(props) {
+//   let 재고 = useContext(재고context);
+//   let history = useHistory();
+//   return (
+//     props.shoes.map((item) => {
+//       return (
 
-        <div className="col-md-4" onClick={()=>{history.push('/detail/' + item.id)}}>
-          <img src={"https://codingapple1.github.io/shop/shoes" + (item.id + 1) + ".jpg"} width="100%" />
-          <h4>{item.title}</h4>
-          <p>{item.content} & {item.price}</p>
-          <Test></Test>
-        </div>
-      )
-    })
-  )
+//         <div className="col-md-4" onClick={()=>{history.push('/detail/' + item.id); props.dispatch({type : 'addRemind' , payload : item.id})}}>
+//           <img src={"https://codingapple1.github.io/shop/shoes" + (item.id + 1) + ".jpg"} width="100%" />
+//           <h4>{item.title}</h4>
+//           <p>{item.content} & {item.price}</p>
+//           <Test></Test>
+//         </div>
+//       )
+//     })
+//   )
+// }
+// function Test(){
+//   let 재고 = useContext(재고context);
+//   return(
+//     <p>재고 : {재고}</p>
+//   )
+// }
+function state를props화(state){
+  return{
+      state : state.reducer,
+      alert열렸니 : state.reducer2,
+      remind : state.reducer3
+  }
 }
-function Test(){
-  let 재고 = useContext(재고context);
-  return(
-    <p>재고 : {재고}</p>
-  )
-}
-
-export default App;
+export default connect(state를props화)(App)
+// export default App;
